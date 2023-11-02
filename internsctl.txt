@@ -1,0 +1,124 @@
+#!/bin/bash
+
+# Define the version number
+VERSION="v0.1.0"
+
+# Function to display help and usage information
+function display_help() {
+    echo "Usage: internsctl [options]"
+    echo "Options:"
+    echo "  --version               Display the version of internsctl"
+    echo "  --help                  Display this help message"
+    echo "  cpu getinfo             Display CPU information"
+    echo "  memory getinfo          Display memory information"
+    echo "  file getinfo [options] <file-name> Display file info"
+    echo "  user create <username>  Create a new user"
+    echo "  user list               List all regular users"
+    echo "  user list --sudo-only   List users with sudo permissions"
+}
+
+# Function to get CPU information
+get_cpu_info() {
+    if [ -f /proc/cpuinfo ]; then
+        cat /proc/cpuinfo
+    else
+        echo "Error: /proc/cpuinfo not found. Unable to retrieve CPU information."
+    fi
+}
+
+# Function to get memory information
+get_memory_info() {
+    if [ -f /proc/meminfo ]; then
+        cat /proc/meminfo
+    else
+        echo "Error: /proc/meminfo not found. Unable to retrieve memory information."
+    fi
+}
+
+# Function to create a new user
+create_user() {
+	if [[ -n "$1" ]]; then
+        	sudo useradd -m "$1"
+        	sudo passwd "$1"
+	else
+        	echo "Error: Please provide a username to create a new user."
+    	fi
+}
+
+# Function to list regular users
+list_users() {
+	getent passwd
+}
+
+# Function to list users with sudo permissions
+list_sudo_users() {
+	getent passwd | cut -d: -f1,3,4 | awk -F: '$2 >= 1000 { print $1 }'
+}
+
+# Function to get information about a file
+function get_file_info() {
+    local filename="$1"
+    
+    # Check if the file exists
+    if [[ -e "$filename" ]]; then
+        echo "File: $filename"
+        
+        # Check for options
+        if [[ -n "$2" ]]; then
+            case $2 in
+                --size | -s)
+                    stat -c "Size(B): %s" "$filename"
+                    ;;
+                --permissions | -p)
+                    stat -c "Access: %A" "$filename"
+                    ;;
+                --owner | -o)
+                    stat -c "Owner: %U" "$filename"
+                    ;;
+                --last-modified | -m)
+                    stat -c "Modify: %y" "$filename"
+                    ;;
+                *)
+                    echo "Unrecognized option: $2. Use 'internsctl --help' for usage information."
+                    ;;
+            esac
+        else
+            # Default output
+            stat -c "Access: %A" "$filename"
+            stat -c "Size(B): %s" "$filename"
+            stat -c "Owner: %U" "$filename"
+            stat -c "Modify: %y" "$filename"
+        fi
+    else
+        echo "Error: File not found - $filename"
+    fi
+}
+
+# Parse command-line arguments
+if [[ "$1" == "--version" ]]; then
+	echo "internsctl $VERSION"
+elif [[ "$1" == "--help" ]]; then
+	display_help
+elif [[ "$1" == "cpu" ]] && [[ "$2" == "getinfo" ]]; then
+	get_cpu_info
+elif [[ "$1" == "memory" ]]  && [[ "$2" == "getinfo" ]]; then
+	get_memory_info
+elif [ "$1" == "file" ] && [ "$2" == "getinfo" ]; then
+	get_file_info "$3" "$4"
+elif [[ "$1" == "user" ]]; then
+	if [[ "$2" == "create" ]]; then
+        	create_user "$3"
+    	elif [[ "$2" == "list" ]]; then
+       	 	if [[ "$3" == "--sudo-only" ]]; then
+            		list_sudo_users
+        	else
+            		list_users
+        	fi
+    	else
+        	echo "Error: Unrecognized 'user' subcommand. Use 'internsctl --help' for usage information."
+    	fi
+else
+	echo "Error: Unrecognized option. Use 'internsctl --help' for usage information."
+	exit 1
+fi
+
