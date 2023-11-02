@@ -1,0 +1,30 @@
+.TH INTERNSCTL 1 "v0.1.0" "Interns Control Command"
+.SH NAME
+internsctl \- custom Linux command for interns
+.SH SYNOPSIS
+.B internsctl
+[\fIOPTION\fR]
+.SH DESCRIPTION
+.B internsctl
+is a custom Linux command for interns that provides various features.
+.P
+.SH OPTIONS
+.TP
+\fB\-\-help\fR
+Display help and usage information.
+.TP
+\fB\-\-version\fR
+Display the command version.
+.SH AUTHOR
+Written by [Your Name].
+.SH REPORTING BUGS
+Report bugs to: [Your Email]
+.SH SEE ALSO
+.BR man (1)
+.SH COPYRIGHT
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+.SH NOTES
+This manual page was created for the "internsctl" command.
+.SH VERSION
+v0.1.0
