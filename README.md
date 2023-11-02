@@ -1,4 +1,4 @@
-# INTER-LINUX-COMMANDS
+<img width="431" alt="Screenshot 2023-11-02 at 7 29 21 PM" src="https://github.com/Kd4u/INTER-LINUX-COMMANDS/assets/96914340/6952e427-e543-437c-9a00-168f74ba5a98"># INTER-LINUX-COMMANDS
 INTERN LINUX COMMANDS CREATION
 STEPS INVOLVED IN THE PROBLEM
 
@@ -37,4 +37,6 @@ If the user list option is provided, it calls the list_users function. If the --
 
 If none of the recognized options are provided, it displays an error message using echo and exits the script with an exit code of 1.
 
+    
 
+<img width="431" alt="Screenshot 2023-11-02 at 7 29 21 PM" src="https://github.com/Kd4u/INTER-LINUX-COMMANDS/assets/96914340/f6a70ed4-43c1-4596-adb6-93614de53c8b">
